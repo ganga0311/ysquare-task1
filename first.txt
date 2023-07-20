@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+class Main {
+    public static Set<String> readEmailsFromFile(String filename) throws IOException {
+        Set<String> emails = new HashSet<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                emails.add(line.trim());
+            }
+        }
+        return emails;
+    }
+
+    public static void main(String[] args) {
+        try {
+            Set<String> file1Emails = readEmailsFromFile("file1.txt");
+            Set<String> file2Emails = readEmailsFromFile("file2.txt");
+
+            // Print emails that are present in both files
+            Set<String> commonEmails = new HashSet<>(file1Emails);
+            commonEmails.retainAll(file2Emails);
+            System.out.println("Emails present in both files:");
+            for (String email : commonEmails) {
+                System.out.println(email);
+            }
+
+            // Print emails that are present in file1 but not in file2
+            Set<String> uniqueEmailsFile1 = new HashSet<>(file1Emails);
+            uniqueEmailsFile1.removeAll(file2Emails);
+            System.out.println("\nEmails present in file1 but not in file2:");
+            for (String email : uniqueEmailsFile1) {
+                System.out.println(email);
+            }
+
+            // Print emails that are present in file2 but not in file1
+            Set<String> uniqueEmailsFile2 = new HashSet<>(file2Emails);
+            uniqueEmailsFile2.removeAll(file1Emails);
+            System.out.println("\nEmails present in file2 but not in file1:");
+            for (String email : uniqueEmailsFile2) {
+                System.out.println(email);
+            }
+
+            // Print all unique emails present in both files
+            Set<String> allUniqueEmails = new HashSet<>(file1Emails);
+            allUniqueEmails.addAll(file2Emails);
+            System.out.println("\nAll unique emails present in both files:");
+            for (String email : allUniqueEmails) {
+                System.out.println(email);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
